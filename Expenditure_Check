@@ -34,3 +34,11 @@ id	loss
 1	0
 2	8
 In the table expenditure_plan, the Mondays correspond to the weeks with numbers 6, 7, 24, and 26 respectively. For the first time period, we add up 10 and 12 to get 22. Since 22 is smaller than 30, the loss is 0. For the second time period, we add up 5 and 13 to get 18. Since 18 is greater than 10, the allowable expendature for this time period, the answer is 18 - 10 = 8.
+
+
+Solution:
+CREATE PROCEDURE checkExpenditure()
+BEGIN
+	create or replace view g as (select * from allowable_expenditure inner join expenditure_plan on week(expenditure_plan.monday_date) between allowable_expenditure.left_bound and allowable_expenditure.right_bound);
+    select id,greatest(sum(expenditure_sum)-value,0) as loss from g group by id;
+END
